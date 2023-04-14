@@ -9,35 +9,98 @@ struct Tarea
     int Duracion; // entre 10 – 100
 }typedef Tarea;
 
+void iniciarEnNull(Tarea ** TPendientes, int cantidad);
+void CargarTarea(Tarea ** TPendientes, int cantidad, char * buff);
+void checkTareas(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas);
+void listarTareas(Tarea ** Tareas, int cantidad); 
+
 int main(void)
 {
     int cantTareas,duracion;
-    Tarea **tareas;
-    Tarea *tareasRealizadas;
+    Tarea **tareasPendientes;
+    Tarea **tareasRealizadas;
     char *buff= (char *)malloc(sizeof(char)*100);
     printf("ingrese la cantidad de tareas a relizar\n");
     scanf("%d",&cantTareas);
-    tareas= (Tarea**) malloc (sizeof(Tarea*)*cantTareas);
-    
-    for (int i = 0; i < cantTareas; i++)
+    tareasPendientes = (Tarea**) malloc (sizeof(Tarea*)*cantTareas);
+    iniciarEnNull(tareasPendientes,cantTareas);
+    CargarTarea(tareasPendientes,cantTareas,buff);
+
+    tareasRealizadas=(Tarea**) malloc (sizeof(Tarea*)*cantTareas);
+    iniciarEnNull(tareasRealizadas,cantTareas);
+    checkTareas(tareasPendientes,cantTareas, tareasRealizadas);
+   
+   
+    puts("\tTareas Realizadas");
+    listarTareas(tareasRealizadas,cantTareas);
+    puts("\tTareas Pendientes");
+    listarTareas(tareasPendientes,cantTareas);
+
+    free(buff);
+    return 0;
+}
+
+void iniciarEnNull(Tarea ** TPendientes, int cantidad)
+{
+    for (int  i = 0; i < cantidad; i++)
     {
-        tareas[i]=NULL;
-        tareas[i]=(Tarea*)malloc(sizeof(Tarea));
+        TPendientes[i]=NULL;
     }
     
-    for (int i = 0; i < cantTareas; i++)
+}
+
+void CargarTarea(Tarea ** TPendientes, int cantidad, char *buff)
+{
+    for (int i = 0; i < cantidad; i++)
     {
-        printf("ingrese la descripcion de la tarea");
+        TPendientes[i]=(Tarea*)malloc(sizeof(Tarea));
+        printf("ingrese la descripcion de la tarea N %d\n",i+1);
         fflush(stdin);
         gets(buff);
-        tareas[i]->Descripcion = (char*)malloc((strlen(buff)+1) * sizeof(char));
-        strcpy(tareas[i]->Descripcion,buff);
-        puts("ingrese la duracion");
-        scanf("%d",&duracion);
-        tareas[i]->Duracion=duracion;
-        tareas[i]->TareaID=i;
+        TPendientes[i]->Descripcion = (char*)malloc((strlen(buff)+1) * sizeof(char));
+        strcpy(TPendientes[i]->Descripcion,buff);
+        TPendientes[i]->Duracion= rand () % (100-10)+1;
+        TPendientes[i]->TareaID=i;
     }
     
-
-    return 0;
+}
+void checkTareas (Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas)
+{
+    
+    puts("\n\n\tchequeo de tareas\n");
+    char yes_not;
+    int j=0;
+    for (int i = 0; i < cantidad; i++)
+    {
+        printf("Tarea Id= %d\n",TPendientes[i]->TareaID);
+        printf("Decripcion: %s\n",TPendientes[i]->Descripcion);
+        printf("Duracion: %d\n",TPendientes[i]->Duracion);
+        printf("Realizo esta tarea (s o n)\n");
+        fflush(stdin);
+        scanf("%c",&yes_not);
+        if (yes_not=='s')
+        {
+            TRealizadas[j]=TPendientes[i];
+            TPendientes[i]=NULL;
+            j++;
+        }
+        printf("\n\n");
+    }
+    puts("===============================");
+}
+void listarTareas(Tarea ** Tareas, int cantidad)
+{
+    puts("===============================");
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (Tareas[i]!=NULL)
+        {
+            printf("Tarea Id= %d\n",Tareas[i]->TareaID);
+            printf("Decripcion: %s\n",Tareas[i]->Descripcion);
+            printf("Duracion: %d\n",Tareas[i]->Duracion);
+        }
+     
+    }
+    puts("===============================");
+    
 }
