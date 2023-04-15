@@ -13,7 +13,7 @@ void iniciarEnNull(Tarea ** TPendientes, int cantidad);
 void CargarTarea(Tarea ** TPendientes, int cantidad, char * buff);
 void checkTareas(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas);
 void listarTareas(Tarea ** Tareas, int cantidad);
-Tarea *BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra);
+Tarea *BuscaTareaPorPalabra(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra);
 void listarTareas(Tarea ** Tareas, int cantidad); 
 Tarea * BuscaTareaPorId(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, int id);
 void mostrarBusqueda(Tarea *tarea);
@@ -44,6 +44,11 @@ int main(void)
     puts("\n\tbusqueda por id");
     scanf("%d",&id);
     busqueda=BuscaTareaPorId(tareasPendientes,cantTareas, tareasRealizadas,id);
+    mostrarBusqueda(busqueda);
+    puts("\n\tbusqueda por palabra clave");
+    fflush(stdin);
+    gets(buff);
+    busqueda=BuscaTareaPorPalabra(tareasPendientes,cantTareas, tareasRealizadas,buff);
     mostrarBusqueda(busqueda);
     free(buff);
     return 0;
@@ -113,17 +118,17 @@ void listarTareas(Tarea ** Tareas, int cantidad)
     puts("===============================");
     
 }
-Tarea *BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra)
+Tarea *BuscaTareaPorPalabra(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra)
 {
     for (int i = 0; i < cantidad; i++)
     {
         if (TPendientes[i]!=NULL && strstr(TPendientes[i]->Descripcion,palabra)!=NULL)
         {
-            return(strstr(TPendientes[i]->Descripcion,palabra));
+            return(TPendientes[i]);
         }
         if (TRealizadas[i]!=NULL && strstr(TRealizadas[i]->Descripcion,palabra))
         {
-            return(TRealizadas[i]->Descripcion,palabra);
+            return(TRealizadas[i]);
         }
         
         
