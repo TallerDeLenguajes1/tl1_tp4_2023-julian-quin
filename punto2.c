@@ -12,7 +12,8 @@ struct Tarea
 void iniciarEnNull(Tarea ** TPendientes, int cantidad);
 void CargarTarea(Tarea ** TPendientes, int cantidad, char * buff);
 void checkTareas(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas);
-void listarTareas(Tarea ** Tareas, int cantidad); 
+void listarTareas(Tarea ** Tareas, int cantidad);
+Tarea *BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra);
 
 int main(void)
 {
@@ -103,4 +104,21 @@ void listarTareas(Tarea ** Tareas, int cantidad)
     }
     puts("===============================");
     
+}
+Tarea *BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, char *palabra)
+{
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (TPendientes[i]!=NULL && strstr(TPendientes[i]->Descripcion,palabra)!=NULL)
+        {
+            return(strstr(TPendientes[i]->Descripcion,palabra));
+        }
+        if (TRealizadas[i]!=NULL && strstr(TRealizadas[i]->Descripcion,palabra))
+        {
+            return(TRealizadas[i]->Descripcion,palabra);
+        }
+        
+        
+    }
+    return NULL;
 }
