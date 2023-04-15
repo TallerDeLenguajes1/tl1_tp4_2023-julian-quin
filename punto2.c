@@ -13,12 +13,15 @@ void iniciarEnNull(Tarea ** TPendientes, int cantidad);
 void CargarTarea(Tarea ** TPendientes, int cantidad, char * buff);
 void checkTareas(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas);
 void listarTareas(Tarea ** Tareas, int cantidad); 
+Tarea * BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, int id);
+void mostrarBusqueda(Tarea *tarea);
 
 int main(void)
 {
-    int cantTareas,duracion;
+    int cantTareas,duracion,id;
     Tarea **tareasPendientes;
     Tarea **tareasRealizadas;
+    Tarea *busqueda;
     char *buff= (char *)malloc(sizeof(char)*100);
     printf("ingrese la cantidad de tareas a relizar\n");
     scanf("%d",&cantTareas);
@@ -36,6 +39,10 @@ int main(void)
     puts("\tTareas Pendientes");
     listarTareas(tareasPendientes,cantTareas);
 
+    puts("\n\tbusqueda por id");
+    scanf("%d",&id);
+    busqueda= BuscarTarea(tareasPendientes,cantTareas, tareasRealizadas,id);
+    mostrarBusqueda(busqueda);
     free(buff);
     return 0;
 }
@@ -74,7 +81,7 @@ void checkTareas (Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas)
     {
         printf("Tarea Id= %d\n",TPendientes[i]->TareaID);
         printf("Decripcion: %s\n",TPendientes[i]->Descripcion);
-        printf("Duracion: %d\n",TPendientes[i]->Duracion);
+        printf("Duracion: %d min\n",TPendientes[i]->Duracion);
         printf("Realizo esta tarea (s o n)\n");
         fflush(stdin);
         scanf("%c",&yes_not);
@@ -97,10 +104,41 @@ void listarTareas(Tarea ** Tareas, int cantidad)
         {
             printf("Tarea Id= %d\n",Tareas[i]->TareaID);
             printf("Decripcion: %s\n",Tareas[i]->Descripcion);
-            printf("Duracion: %d\n",Tareas[i]->Duracion);
+            printf("Duracion: %d min\n",Tareas[i]->Duracion);
         }
      
     }
     puts("===============================");
     
+}
+
+Tarea * BuscarTarea(Tarea ** TPendientes, int cantidad, Tarea ** TRealizadas, int id)
+{
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (TPendientes[i]!=NULL && TPendientes[i]->TareaID==id)
+        {
+            return(TPendientes[i]);
+        }
+        if (TRealizadas[i]!= NULL && TRealizadas[i]->TareaID==id)
+        {
+            return (TRealizadas[i]);
+        } 
+        
+    }
+    return NULL;
+    
+}
+void mostrarBusqueda(Tarea *tarea)
+{
+    if (tarea!=NULL)
+    {
+        printf("\tTAREA ENCONTRADA\n");
+        printf("id buscado: %d\n",tarea->TareaID);
+        printf("descripcion: %s\n",tarea->Descripcion);
+        printf("duracion: %d min\n",tarea->Duracion);
+    }else {
+        printf("NO hay concidencias con el Id ingresado\n");
+    }
+
 }
