@@ -162,6 +162,6 @@ void mostrarBusqueda(Tarea *tarea)
         printf("descripcion: %s\n",tarea->Descripcion);
         printf("duracion: %d min\n",tarea->Duracion);
     }else {
-        printf("NO hay concidencias con el Id ingresado\n");
+        printf("NO hay concidencias con el Id o palabra ingresado/a\n");
     }
 }
