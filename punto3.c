@@ -82,6 +82,7 @@ int main(void)
     liberMemoria(tareasPendientes);
     liberMemoria(tareasRealizadas);
     free(buff);
+    getch();
     return 0;
 }
 
@@ -133,7 +134,7 @@ void controlarTareas(Nodo **tareasPendientes, Nodo **tareasRealizadas)
         tareaActual = tareaActual->Siguiente; // actual nunca quedará con el null
     }
 
-    if (*tareasPendientes == tareaActual) // cuando el dato buscado es el primero
+    if (*tareasPendientes!=NULL && *tareasPendientes == tareaActual) // cuando el dato buscado es el primero
     {
         *tareasPendientes = tareaActual->Siguiente;
         AgregarTareaRealizada(tareasRealizadas, tareaActual);
