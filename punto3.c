@@ -22,8 +22,8 @@ void controlarTareas(Nodo **tareasPendientes, Nodo **tareasRealizadas, Nodo **ta
 void agregarTareaAlinicio(Nodo **tarea, Tarea newTarea); //
 void listarTareas(Nodo *tareas);
 void AgregarTarea_A_OtraLista(Nodo **lista, Nodo *tarea);
-Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas, char *buff);
-Nodo *BuscaTareaPorId(Nodo *tareasPendientes, Nodo *tareasRealizadas);
+Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas,Nodo *tareasEnProceso, char *buff);
+Nodo *BuscaTareaPorId(Nodo *tareasPendientes, Nodo *tareasRealizadas,Nodo *tareasEnProceso);
 void mostraTareaUnica(Nodo *tarea);
 void liberMemoriaGeneral(Nodo *tarea);
 void menu(Nodo **tareasPendientess, Nodo **tareasRealizadass, Nodo **tareasEnProcesoo, char *buff);
@@ -175,10 +175,11 @@ void AgregarTarea_A_OtraLista(Nodo **Lista, Nodo *tarea)
     puts("movimiento Exitoso");
 }
 
-Nodo *BuscaTareaPorId(Nodo *tareasPendientes, Nodo *tareasRealizadas)
+Nodo *BuscaTareaPorId (Nodo *tareasPendientes, Nodo *tareasRealizadas, Nodo *tareasEnProceso)
 {
     Nodo *auxPendientes = tareasPendientes;
     Nodo *auxRealizadas = tareasRealizadas;
+    Nodo *auxEnProceso = tareasEnProceso;
     int id;
     printf("\nIgrese un id: ");
     fflush(stdin);
@@ -201,12 +202,21 @@ Nodo *BuscaTareaPorId(Nodo *tareasPendientes, Nodo *tareasRealizadas)
         }
         auxRealizadas = auxRealizadas->Siguiente;
     }
+     while (auxEnProceso != NULL)
+    {
+        if (id == auxEnProceso->T.TareaID)
+        {
+            return (auxEnProceso);
+        }
+        auxEnProceso = auxEnProceso->Siguiente;
+    }
     return (NULL);
 }
-Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas, char *buff)
+Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas, Nodo *tareasEnProceso, char *buff)
 {
     Nodo *auxPendientes = tareasPendientes;
     Nodo *auxRealizadas = tareasRealizadas;
+    Nodo *auxEnProceso = tareasEnProceso;
     puts("\ningrese la una palabra clave: ");
     fflush(stdin);
     gets(buff);
@@ -227,6 +237,14 @@ Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas, char 
             return (tareasRealizadas);
         }
         tareasRealizadas = tareasRealizadas->Siguiente;
+    }
+       while (auxEnProceso != NULL)
+    {
+        if (strstr(auxEnProceso->T.Descripcion, buff) != NULL)
+        {
+            return (auxEnProceso);
+        }
+        auxEnProceso = auxEnProceso->Siguiente;
     }
     return (NULL);
 }
@@ -338,13 +356,13 @@ void menu(Nodo **tareasPendientess, Nodo **tareasRealizadass, Nodo **tareasEnPro
             listarTareas(tareasEnProceso);
             break;
         case 4:
-            busquedaID = BuscaTareaPorId(tareasPendientes, tareasRealizadas);
+            busquedaID = BuscaTareaPorId(tareasPendientes, tareasRealizadas,tareasEnProceso);
             mostraTareaUnica(busquedaID);
 
             break;
         case 5:
 
-            busquedaWord = BuscaTareaPorPalabra(tareasPendientes, tareasRealizadas, buff);
+            busquedaWord = BuscaTareaPorPalabra(tareasPendientes, tareasRealizadas,tareasEnProceso,buff);
             mostraTareaUnica(busquedaWord);
             break;
         case 6:
