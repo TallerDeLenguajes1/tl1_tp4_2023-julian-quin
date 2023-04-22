@@ -25,7 +25,7 @@ void AgregarTarea_A_OtraLista(Nodo **lista, Nodo *tarea);
 Nodo *BuscaTareaPorPalabra(Nodo *tareasPendientes, Nodo *tareasRealizadas, char *buff);
 Nodo *BuscaTareaPorId(Nodo *tareasPendientes, Nodo *tareasRealizadas);
 void mostraTareaUnica(Nodo *tarea);
-void liberMemoria(Nodo *tarea);
+void liberMemoriaGeneral(Nodo *tarea);
 void menu(Nodo **tareasPendientess, Nodo **tareasRealizadass, Nodo **tareasEnProcesoo, char *buff);
 void EliminarTarea(Nodo *tarea);
 void MostrarDatos(Nodo *lista);
@@ -42,8 +42,8 @@ int main(void)
     Nodo *tareasRealizadas = inicilizarLista();
     Nodo *tareasEnProceso = inicilizarLista();
     menu(&tareasPendientes, &tareasRealizadas, &tareasEnProceso, buff);
-    liberMemoria(tareasPendientes);
-    liberMemoria(tareasRealizadas);
+    liberMemoriaGeneral(tareasPendientes);
+    liberMemoriaGeneral(tareasRealizadas);
     free(buff);
     return 0;
 }
@@ -107,6 +107,7 @@ void controlarTareas(Nodo **tareasPendientes, Nodo **tareasRealizadas, Nodo **ta
         fflush(stdin);
         scanf("%d", &id);
         printf("\nindique la operacion (1 = eliminar, 2 = mover, 3 = nada ): ");
+        fflush(stdin);
         scanf("%d", &operacion);
 
         if (operacion == 1)
@@ -139,9 +140,11 @@ void controlarTareas(Nodo **tareasPendientes, Nodo **tareasRealizadas, Nodo **ta
                 }
 
                 MoverTareas(tareasPendientes, tareasRealizadas, tareasEnProceso, Mover, bandera);
+                bandera=0;
             }
         }
         puts("\nDesea Modificar otra tarea ( si=1  0=no )");
+        fflush(stdin);
         scanf("%d", &operacion);
     } while (operacion == 1);
 }
@@ -242,18 +245,21 @@ void mostraTareaUnica(Nodo *tarea)
     }
 }
 
-void liberMemoria(Nodo *tarea)
+void liberMemoriaGeneral(Nodo *tarea)
 {
     Nodo *auxTarea = tarea;
     Nodo *TareaAnterior = tarea;
     Nodo *TareaActual = tarea;
-    while (auxTarea != NULL)
+    while (auxTarea != NULL) // libero las descripciones
     {
-        free(auxTarea->T.Descripcion);
+        if (auxTarea->T.Descripcion!= NULL)
+        {
+            free(auxTarea->T.Descripcion);
+        }
         auxTarea = auxTarea->Siguiente;
     }
 
-    while (TareaActual != NULL)
+    while (TareaActual != NULL) //libero los nodos
     {
         TareaAnterior = TareaActual;
         TareaActual = TareaActual->Siguiente;
@@ -278,9 +284,8 @@ void EliminarTarea(Nodo *tarea)
 {
     if (tarea != NULL)
     {
-        if (tarea->T.Descripcion)
-            free(tarea->T.Descripcion);
-        free(tarea);
+        if (tarea->T.Descripcion) free(tarea->T.Descripcion);
+        free(tarea); // se elimina el nodo
         puts("\nEliminacion Exitosa");
     }
     if (tarea == NULL)
