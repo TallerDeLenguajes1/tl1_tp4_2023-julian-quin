@@ -95,9 +95,10 @@ void controlarTareas(Nodo **tareasPendientes, Nodo **tareasRealizadas, Nodo **ta
     Nodo *Eliminar, *Mover;
     int id, bandera = 0;
     int operacion;
+    puts("\nCONTROL DE TAREAS");
     do
     {
-        puts("\n\tTAREAS PENDIENTES\n\n");
+        puts("\n\tTAREAS PENDIENTES\n");
         listarTareas(*tareasPendientes);
         puts("\tTAREAS REALIZADAS\n\n");
         listarTareas(*tareasRealizadas);
@@ -167,10 +168,10 @@ void listarTareas(Nodo *tareas)
         printf("Vacio\n");
     }
 }
-void AgregarTarea_A_OtraLista(Nodo **tareasRealizadas, Nodo *tarea)
+void AgregarTarea_A_OtraLista(Nodo **Lista, Nodo *tarea)
 {
-    tarea->Siguiente = *tareasRealizadas;
-    *tareasRealizadas = tarea;
+    tarea->Siguiente = *Lista;
+    *Lista = tarea;
     puts("movimiento Exitoso");
 }
 
@@ -350,7 +351,7 @@ void menu(Nodo **tareasPendientess, Nodo **tareasRealizadass, Nodo **tareasEnPro
             puts("\tTAREAS PENDIENTES\n");
             MostrarDatos(tareasPendientes);
             puts("\n\n\tTAREAS REALIZADAS\n\n");
-            MostrarDatos(tareasEnProceso);
+            MostrarDatos(tareasRealizadas);
             puts("\n\n\tTAREAS EN PROCESO\n\n");
             MostrarDatos(tareasEnProceso);
             break;
